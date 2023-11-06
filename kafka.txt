@@ -1,0 +1,10 @@
+reference "https://www.tutorialspoint.com/apache_kafka/apache_kafka_installation_steps.htm"
+
+
+kafka-topics.sh --delete --topic metadata-changes --bootstrap-server localhost:9092
+
+
+kafka-topics.sh --list --bootstrap-server localhost:9092
+
+
+
