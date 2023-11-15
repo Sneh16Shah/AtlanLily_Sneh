@@ -30,8 +30,7 @@ RUN apt-get install libpq-dev
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y openjdk-11-jdk
 
 # Install postgress sql
-RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y postgresql postgresql-contrib
-
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y postgresql postgresql-contrib libpq-dev git
 
 # Install python3 and pip
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y python3 pip
