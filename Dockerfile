@@ -24,6 +24,8 @@ autologin-session=Lubuntu\n\
 # Set environment variable for display
 ENV DISPLAY=host.docker.internal:0.0
 
+RUN apt-get install libpq-dev
+
 # Install Java 11
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y openjdk-11-jdk
 
