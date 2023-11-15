@@ -118,7 +118,16 @@ Docker file contains instructions for creating docker container with all the ser
 ### Instructions for running
 
 1. Ensure apache zookeper, kafka services are running
-2. Run createTable.py for creating database and tables to store meta data in postgres sql.
+   Go to kafka installed directory and write the below command to start zookeper services.
+   ```bash
+   bin/zkServer.sh start
+   ```
+   Go to the kakfa installed directory to start kafka services by running the below command.
+   ```bash
+   bin/kafka-server-start.sh config/server.properties
+   ```
+3. Run createTable.py for creating database and tables to store meta data in postgres sql.
+    
 ```
 pyhton3 createTable.py.py
 ```   
@@ -126,24 +135,36 @@ pyhton3 createTable.py.py
 ```
 pyhton3 kafka_producer.py
 ```
+
 4. Run insertKafkaDb.py file by running the below command to capture random meta data and store it
 ```
 pyhton3 kafka_producer.py
 ```
+![image](https://github.com/VONBLESS/DataStream/assets/68594453/9e41bbbf-e971-473e-a8cc-53d0070f6e6e)
+
 5. Run api.py to create an api endpoint and make data accesible via restful services.
 ```
 pyhton3 api.py
 ```
+![image](https://github.com/VONBLESS/DataStream/assets/68594453/0e6565dc-7a64-4605-bcc3-7eb6640f25a8)
+
+
 6. Run flask_backEnd.py to enable protected data access by creating a user and enabling only them to access the api via the android app created using kiwi.
 ```
 pyhton3 flask_backEnd.py
 ```
+![image](https://github.com/VONBLESS/DataStream/assets/68594453/b016d350-92eb-4d93-9d69-002b0d176454)
+
 7. now open the android app to check if api services are running well
    There are 3 endpoints available in the api
-   First for current data in /latest_metadata_event route
-   Second for all data in /metadata_events_all/ route
-   Third for metadata by id in /metadata_events/{event_id} route
-
+   # First for current data in /latest_metadata_event route.
+   ![image](https://github.com/VONBLESS/DataStream/assets/68594453/6767b9f6-e81d-497e-be36-24ec28da671a)
+   # Second for all data in /metadata_events_all/ route.
+   ![image](https://github.com/VONBLESS/DataStream/assets/68594453/bf884517-460a-458c-b2c9-9f99e44a02d0)
+   # Third for metadata by id in /metadata_events/{event_id} route.
+   ![image](https://github.com/VONBLESS/DataStream/assets/68594453/f94adf80-237e-4541-b9d1-57710e5b8075)
+  
+  
    use these routes in android app o check for data availibility.
 
    Install the android app by just running the apk file in android device.
