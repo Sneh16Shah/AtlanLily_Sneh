@@ -240,16 +240,6 @@ Implemented basic authentication and authorization mechanisms to safeguard sensi
 ### Description:
 Designed the system to be scalable and flexible, leveraging Docker for containerization and Kubernetes for orchestration.
 
----
-
-## 8. Monitoring and Logging
-
-### Technologies Used:
-- [Prometheus](https://prometheus.io/): An open-source monitoring and alerting toolkit.
-- [Grafana](https://grafana.com/): An open-source analytics and monitoring platform.
-
-### Description:
-Integrated Prometheus and Grafana for monitoring system performance, identifying issues, and gathering usage statistics.
 
 ---
 
