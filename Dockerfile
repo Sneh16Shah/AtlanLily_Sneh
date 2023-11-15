@@ -24,13 +24,12 @@ autologin-session=Lubuntu\n\
 # Set environment variable for display
 ENV DISPLAY=host.docker.internal:0.0
 
-RUN apt-get install libpq-dev
-
 # Install Java 11
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y openjdk-11-jdk
 
 # Install postgress sql
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y postgresql postgresql-contrib libpq-dev git
+
 
 # Install python3 and pip
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y python3 pip
@@ -40,17 +39,17 @@ RUN pip install aioredis==2.0.1 annotated-types==0.6.0 anyio==3.7.1 async-timeou
 
 # Install Apache Spark
 WORKDIR /opt
-RUN wget -q https://downloads.apache.org/spark/spark-3.2.0/spark-3.2.0-bin-hadoop3.2.tgz && \
-  tar -xzf spark-3.2.0-bin-hadoop3.2.tgz && \
-  rm spark-3.2.0-bin-hadoop3.2.tgz && \
-  ln -s spark-3.2.0-bin-hadoop3.2 spark
+RUN wget -q https://dlcdn.apache.org/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz && \
+  tar -xzf spark-3.5.0-bin-hadoop3.tgz && \
+  rm spark-3.5.0-bin-hadoop3.tgz && \
+  ln -s spark-3.5.0-bin-hadoop3 spark
 
 # Install Kafka
 WORKDIR /opt
-RUN wget -q https://downloads.apache.org/kafka/3.0.0/kafka_2.12-3.0.0.tgz && \
-  tar -xzf kafka_2.12-3.0.0.tgz && \
-  rm kafka_2.12-3.0.0.tgz && \
-  ln -s kafka_2.12-3.0.0 kafka
+RUN wget -q https://downloads.apache.org/kafka/3.6.0/kafka-3.6.0-src.tgz && \
+  tar -xzf kafka-3.6.0-src.tgz && \
+  rm kafka-3.6.0-src.tgz && \
+  ln -s kafka-3.6.0-src kafka
 
 # Install ZooKeeper
 RUN apt install -y zookeeperd
@@ -61,3 +60,4 @@ CMD service dbus start ; /usr/lib/systemd/systemd-logind & service lightdm start
   service zookeeper start && \
   /opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/server.properties && \
   /bin/bash
+
