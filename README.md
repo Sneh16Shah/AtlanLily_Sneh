@@ -396,16 +396,6 @@ Code for restful services.
 Creating an API endpoint to make data visible in the current network
 
 ```python3
-class MetadataEvent(BaseModel):
-    id: int
-    entity_id: int
-    event_type: str
-    metadata_info: str
-
-class SimpleMetadataEvent(BaseModel):
-    entity_id: int
-    event_type: str
-    metadata_info: str
 
 @app.get("/metadata_events/{event_id}", response_model=MetadataEvent)
 def read_metadata_event(event_id: int):
@@ -504,14 +494,6 @@ def read_latest_metadata_event():
 Python Flask for backend user verification and access level
 
 ```python3
-
-class User(UserMixin):
-    def __init__(self, id, username, password, role):
-        self.id = id
-        self.username = username
-        self.password = password
-        self.role = role
-
 @login_manager.user_loader
 def load_user(user_id):
     cursor = conn.cursor()
