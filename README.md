@@ -286,21 +286,6 @@ Code for data streaming random data
 
 
 ```python3
-import random
-import time
-from confluent_kafka import Producer
-
-
-kafka_config = {
-    'bootstrap.servers': 'localhost:9092',  
-    'client.id': 'metadata-producer',
-    'acks': 1,  
-    'linger.ms': 0,  
-}
-
-producer = Producer(kafka_config)
-
-topic = 'metadata-changes'
 
 def generate_random_metadata_event(id):
     entity_id = str(id)#str(random.randint(1, 1000))
@@ -319,32 +304,11 @@ for _ in range(100000):
     print("Generated entry {}".format(_))
     time.sleep(1) 
 
-print("Produced 50 random metadata events.")
-
 ```
 
 Code for data capturing the streamed data 
 
 ```python3
-
-from confluent_kafka import Consumer, KafkaError
-import time
-
-kafka_config = {
-    'bootstrap.servers': 'localhost:9092',  
-    'group.id': 'metadata-consumer-group',
-    'auto.offset.reset': 'earliest'
-}
-
-consumer = Consumer(kafka_config)
-
-topic = 'metadata-changes'
-
-consumer.subscribe([topic])
-
-events_to_process = 500  
-
-event_count = 0
 
 while event_count < events_to_process:
     msg = consumer.poll(1.0)
@@ -373,15 +337,6 @@ Code for creating database and tables in postgres for storing and managing strea
 
 ```python3
 
-import psycopg2
-
-db_params = {
-    "host": "localhost",  
-    "database": "metadata_db", 
-    "user": "postgres", 
-    "password": "123456"  
-}
-
 # SQL command to create the metadata_events table
 create_table_sql = """
 CREATE TABLE metadata_events (
@@ -402,65 +357,12 @@ CREATE TABLE auth_table (
 );
 """
 
-# #SQL command to select all data from metadata_events
-# select_query="""
-# SELECT * FROM metadata_events
-# """
-# Connect to the PostgreSQL database
-conn = psycopg2.connect(**db_params)
-cursor = conn.cursor()
-
-# Execute the SQL command to create the table
-cursor.execute(create_table_sql)
-cursor.execute(create_table_sql1)
-# cursor.execute(select_query)
-
-# data = cursor.fetchall()
-# print(data)
-
-conn.commit()
-cursor.close()
-conn.close()
-
-print("metadata_events table created.")
-
-
 ```
 
 
 Code for data capturing the streamed data and storing it into a sql database with minimal loss.
 
 ```python3
-
-import psycopg2
-from confluent_kafka import Consumer, KafkaError
-
-kafka_config = {
-    'bootstrap.servers': 'localhost:9092',  
-    'group.id': 'metadata-consumer-group',
-    'auto.offset.reset': 'earliest'
-}
-
-db_params = {
-    "host": "localhost",  
-    "database": "metadata_db",  
-    "user": "postgres",  
-    "password": "123456"  
-}
-
-consumer = Consumer(kafka_config)
-
-topic = 'metadata-changes'
-
-consumer.subscribe([topic])
-
-events_to_process = 500  
-
-event_count = 0
-
-conn = psycopg2.connect(**db_params)
-cursor = conn.cursor()
-
 while event_count < events_to_process:
     msg = consumer.poll(1.0)
 
@@ -488,35 +390,12 @@ while event_count < events_to_process:
 
     event_count += 1
 
-    #time.sleep(1)  
-
-conn.commit()
-cursor.close()
-conn.close()
-
-consumer.close()
-
 ```
 
 Code for restful services. 
 Creating an API endpoint to make data visible in the current network
 
 ```python3
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-import psycopg2
-
-app = FastAPI()
-
-# PostgreSQL connection parameters
-db_params = {
-    "host": "localhost",  
-    "database": "metadata_db",  
-    "user": "postgres",  
-    "password": "123456"  
-}
-
 class MetadataEvent(BaseModel):
     id: int
     entity_id: int
@@ -620,35 +499,11 @@ def read_latest_metadata_event():
     
     return {"message": "No events found"}
 
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-
 ```
 
 Python Flask for backend user verification and access level
 
 ```python3
-
-from flask import Flask, request, render_template, redirect, url_for, flash
-import psycopg2
-from flask_login import current_user, LoginManager, UserMixin, login_user, login_required, logout_user
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'hello_world'  
-
-db_params = {
-    "host": "localhost",  
-    "database": "metadata_db",
-    "user": "postgres",  
-    "password": "123456"  
-}
-
-conn = psycopg2.connect(**db_params)
-
-login_manager = LoginManager(app)
-login_manager.login_view = "login"
 
 class User(UserMixin):
     def __init__(self, id, username, password, role):
@@ -713,26 +568,11 @@ def dashboard():
     else:
         
         return "User Dashboard"
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('login'))
-
-if __name__ == '__main__':
-    app.run(debug=True)
 ```
 
 Python Kiwi app for accesing data hosted on any api.
 
 ```python3
-from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.textinput import TextInput
-from kivy.uix.label import Label
-from kivy.uix.boxlayout import BoxLayout
-import requests
 
 class DataFetchApp(App):
     def build(self):
@@ -765,8 +605,6 @@ class DataFetchApp(App):
         else:
             self.text_area.text = 'Error: Unable to fetch data'
 
-if __name__ == '__main__':
-    DataFetchApp().run()
 ```
 
 Code for Docker file to setup whole setup with UI in a light ubuntu
