@@ -185,7 +185,9 @@ pyhton3 flask_backEnd.py
     │   ├── Dashboard.html
     │   ├── Login.html
     │   ├── register.html
+    ├── requirements.txt
     └── Readme.md
+
 
 ```
 
