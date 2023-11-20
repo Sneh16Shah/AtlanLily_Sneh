@@ -288,7 +288,7 @@ Code for data streaming random data
 ```python3
 
 def generate_random_metadata_event(id):
-    entity_id = str(id)#str(random.randint(1, 1000))
+    entity_id = str(id)
     event_type = random.choice(['update', 'create', 'delete'])
     metadata_info = f'Random metadata event for entity {entity_id}'
     return {
@@ -297,12 +297,18 @@ def generate_random_metadata_event(id):
         'metadata_info': metadata_info,
     }
 
-for _ in range(100000):
-    metadata_event = generate_random_metadata_event(_)
+
+for i in range(100000):
+    metadata_event = generate_random_metadata_event(i)
     producer.produce(topic, key='metadata_key', value=str(metadata_event))
     producer.flush()
-    print("Generated entry {}".format(_))
-    time.sleep(1) 
+
+    # Open the file each time to write immediately without buffering
+    with open('producer_logs.log', 'a') as log_file:
+        log_file.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} - INFO - Generated entry {i} - Metadata Event: {metadata_event}\n")
+    
+    print("Generated entry", i)
+    time.sleep(1)
 
 ```
 
